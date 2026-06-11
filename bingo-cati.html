@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bingo Cumple Cati 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f7f2ec;
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .page {
+    background: #f7f2ec;
+    max-width: 480px;
+    width: 100%;
+    position: relative;
+    padding: 24px 20px 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(160,80,120,0.08);
+  }
+
+  /* Flores decorativas SVG inline */
+  .floral-tl, .floral-tr, .floral-bl, .floral-br {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .floral-tl { top: 0; left: 0; width: 110px; }
+  .floral-tr { top: 0; right: 0; width: 110px; transform: scaleX(-1); }
+  .floral-bl { bottom: 0; left: 0; width: 90px; transform: scaleY(-1); }
+  .floral-br { bottom: 0; right: 0; width: 90px; transform: scale(-1,-1); }
+
+  .content { position: relative; z-index: 1; }
+
+  .header { text-align: center; margin-bottom: 16px; }
+  .title-29 {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    color: #d4a0b8;
+    line-height: 1;
+  }
+  .title-cati {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 34px;
+    color: #7a9e7a;
+    line-height: 1.1;
+    margin-top: -4px;
+  }
+  .subtitle {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    color: #b09aa0;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .nav-btn {
+    background: transparent;
+    border: 1px solid #c9a8b8;
+    color: #a06080;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    line-height: 1;
+  }
+  .nav-btn:hover { background: #f0d8e4; }
+  .card-indicator {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: #a06080;
+    min-width: 90px;
+    text-align: center;
+  }
+
+  .bingo-banner {
+    display: none;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: #d4a0b8;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    animation: pop 0.4s ease;
+  }
+  @keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+
+  .cell {
+    background: rgba(255,255,255,0.78);
+    border: 1px solid #e0cdd5;
+    border-radius: 10px;
+    padding: 10px 7px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    min-height: 76px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    user-select: none;
+  }
+  .cell:hover { background: rgba(255,255,255,0.97); border-color: #c9a8b8; }
+  .cell.marked {
+    background: rgba(212,160,184,0.22);
+    border-color: #d4a0b8;
+  }
+  .cell.marked::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: rgba(212,160,184,0.38);
+    border: 2px solid #d4a0b8;
+    pointer-events: none;
+  }
+  .song-title {
+    font-size: 12px;
+    color: #5a3a4a;
+    line-height: 1.35;
+    position: relative;
+    z-index: 1;
+  }
+  .song-artist {
+    font-size: 10px;
+    color: #a08090;
+    margin-top: 3px;
+    line-height: 1.2;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-note {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: #b09aa0;
+    margin-bottom: 8px;
+  }
+  .reset-btn {
+    background: transparent;
+    border: 1px solid #c9a8b8;
+    color: #a06080;
+    border-radius: 20px;
+    padding: 5px 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    font-family: 'Lato', sans-serif;
+    transition: background 0.15s;
+  }
+  .reset-btn:hover { background: #f0d8e4; }
+
+  @media (max-width: 400px) {
+    .title-29 { font-size: 40px; }
+    .title-cati { font-size: 26px; }
+    .cell { min-height: 66px; padding: 8px 5px; }
+    .song-title { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- flores esquina superior izquierda -->
+  <svg class="floral-tl" viewBox="0 0 110 130" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="20" cy="55" rx="6" ry="14" fill="#e8a0b0" transform="rotate(-20,20,55)"/>
+    <circle cx="14" cy="40" r="5" fill="#f0c4d4"/>
+    <line x1="20" y1="75" x2="24" y2="105" stroke="#9aba9a" stroke-width="1.5"/>
+    <ellipse cx="32" cy="115" rx="5" ry="10" fill="#b8d4b8" transform="rotate(15,32,115)"/>
+    <circle cx="45" cy="18" r="7" fill="#d4a0b8"/>
+    <ellipse cx="15" cy="90" rx="4" ry="9" fill="#f0c4d4" transform="rotate(25,15,90)"/>
+    <circle cx="65" cy="10" r="5" fill="#c4e0a0"/>
+    <ellipse cx="8" cy="20" rx="5" ry="11" fill="#e0b4c8" transform="rotate(-10,8,20)"/>
+    <circle cx="80" cy="30" r="4" fill="#b8c8e8"/>
+    <ellipse cx="55" cy="40" rx="4" ry="8" fill="#d4b8d4" transform="rotate(10,55,40)"/>
+  </svg>
+
+  <!-- flores esquina superior derecha (espejada por CSS) -->
+  <svg class="floral-tr" viewBox="0 0 110 130" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="20" cy="55" rx="6" ry="14" fill="#c8d8b0" transform="rotate(20,20,55)"/>
+    <circle cx="14" cy="38" r="6" fill="#e8b0c8"/>
+    <ellipse cx="35" cy="110" rx="5" ry="11" fill="#d4c4e8" transform="rotate(-10,35,110)"/>
+    <circle cx="60" cy="15" r="5" fill="#f0d4a0"/>
+    <ellipse cx="10" cy="85" rx="4" ry="9" fill="#b0d4c8" transform="rotate(15,10,85)"/>
+    <circle cx="75" cy="40" r="7" fill="#e8a0b0"/>
+    <ellipse cx="50" cy="25" rx="5" ry="12" fill="#c8e0b0" transform="rotate(-20,50,25)"/>
+    <circle cx="28" cy="70" r="5" fill="#d4b0c8"/>
+  </svg>
+
+  <!-- flores esquina inferior izquierda (espejada por CSS) -->
+  <svg class="floral-bl" viewBox="0 0 90 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="20" cy="20" r="6" fill="#a0c8b8"/>
+    <ellipse cx="50" cy="35" rx="5" ry="10" fill="#e8a0b0" transform="rotate(8,50,35)"/>
+    <circle cx="70" cy="15" r="5" fill="#d4b8d4"/>
+    <ellipse cx="30" cy="60" rx="4" ry="9" fill="#f0c4a0" transform="rotate(-12,30,60)"/>
+    <circle cx="10" cy="55" r="4" fill="#b8c4e0"/>
+    <ellipse cx="60" cy="70" rx="6" ry="11" fill="#c8d8b0" transform="rotate(15,60,70)"/>
+  </svg>
+
+  <!-- flores esquina inferior derecha (espejada por CSS) -->
+  <svg class="floral-br" viewBox="0 0 90 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="20" cy="20" r="6" fill="#e0b4c8"/>
+    <ellipse cx="50" cy="40" rx="5" ry="10" fill="#c4e0a0" transform="rotate(-8,50,40)"/>
+    <circle cx="70" cy="18" r="5" fill="#b8c8e8"/>
+    <ellipse cx="28" cy="65" rx="4" ry="8" fill="#d4a0b8" transform="rotate(12,28,65)"/>
+    <circle cx="10" cy="50" r="5" fill="#f0d4a0"/>
+  </svg>
+
+  <div class="content">
+    <div class="header">
+      <p class="title-29">29</p>
+      <p class="title-cati">Cati</p>
+      <p class="subtitle">♪ bingo musical ♪</p>
+    </div>
+
+    <div class="card-nav">
+      <button class="nav-btn" onclick="prevCard()">‹</button>
+      <span class="card-indicator" id="cardNum">cartón 1 / 15</span>
+      <button class="nav-btn" onclick="nextCard()">›</button>
+    </div>
+
+    <div class="bingo-banner" id="bingoBanner">🌸 ¡BINGO! 🌸</div>
+
+    <div class="grid" id="bingoGrid"></div>
+
+    <p class="footer-note">tocá la canción cuando la escuches</p>
+    <button class="reset-btn" onclick="resetCard()">limpiar cartón</button>
+  </div>
+</div>
+
+<script>
+const cards = [
+  [["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["The Climb","Miley Cyrus"],["El Efecto","Rauw Alejandro, Chencho Corleone"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["FAVORITA","Angela Torres"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["Carita Triste","Q' Lokura, Los Herrera"],["Dos Amantes","TINI, Ulises Bueno"],["DtMF","Bad Bunny"],["Down","TINI"],["capaz (merengueton)","Alleh, Yorghaki"],["La Noche Sin Tí","Los Huayra"]],
+  [["El Efecto","Rauw Alejandro, Chencho Corleone"],["capaz (merengueton)","Alleh, Yorghaki"],["La Noche Sin Tí","Los Huayra"],["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["Carita Triste","Q' Lokura, Los Herrera"],["The Climb","Miley Cyrus"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["Pobre Diabla","Don Omar"],["Llamado de Emergencia","Daddy Yankee"],["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["Dos Amantes","TINI, Ulises Bueno"],["DtMF","Bad Bunny"]],
+  [["The Climb","Miley Cyrus"],["Fuego","Intoxicados, Andrés Calamaro"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["BAILE INoLVIDABLE","Bad Bunny"],["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["El Efecto","Rauw Alejandro, Chencho Corleone"],["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["FAVORITA","Angela Torres"],["Como Eran Las Cosas","Babasonicos"],["Pobre Diabla","Don Omar"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["La Noche Sin Tí","Los Huayra"]],
+  [["BAILE INoLVIDABLE","Bad Bunny"],["Me Gusta","Miranda!, TINI"],["La Noche Sin Tí","Los Huayra"],["Llamado de Emergencia","Daddy Yankee"],["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["Pobre Diabla","Don Omar"],["Fuego","Intoxicados, Andrés Calamaro"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["Down","TINI"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["DtMF","Bad Bunny"]],
+  [["BAILE INoLVIDABLE","Bad Bunny"],["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["Down","TINI"],["Como Eran Las Cosas","Babasonicos"],["Llamado de Emergencia","Daddy Yankee"],["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["Fuego","Intoxicados, Andrés Calamaro"],["The Climb","Miley Cyrus"],["Dos Amantes","TINI, Ulises Bueno"],["Me Gusta","Miranda!, TINI"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"]],
+  [["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["capaz (merengueton)","Alleh, Yorghaki"],["Como Eran Las Cosas","Babasonicos"],["Carita Triste","Q' Lokura, Los Herrera"],["36 Vidas","TINI"],["DtMF","Bad Bunny"],["Pobre Diabla","Don Omar"],["Callaita","Bad Bunny, Tainy"],["BAILE INoLVIDABLE","Bad Bunny"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["Llamado de Emergencia","Daddy Yankee"],["The Climb","Miley Cyrus"]],
+  [["Pobre Diabla","Don Omar"],["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["DtMF","Bad Bunny"],["La Noche Sin Tí","Los Huayra"],["36 Vidas","TINI"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["Down","TINI"],["Como Eran Las Cosas","Babasonicos"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["The Climb","Miley Cyrus"],["Llamado de Emergencia","Daddy Yankee"],["BAILE INoLVIDABLE","Bad Bunny"]],
+  [["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["BAILE INoLVIDABLE","Bad Bunny"],["The Climb","Miley Cyrus"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["Carita Triste","Q' Lokura, Los Herrera"],["FAVORITA","Angela Torres"],["Dos Amantes","TINI, Ulises Bueno"],["El Efecto","Rauw Alejandro, Chencho Corleone"],["Como Eran Las Cosas","Babasonicos"],["Me Gusta","Miranda!, TINI"],["DtMF","Bad Bunny"],["Llamado de Emergencia","Daddy Yankee"]],
+  [["Down","TINI"],["Llamado de Emergencia","Daddy Yankee"],["Carita Triste","Q' Lokura, Los Herrera"],["Como Eran Las Cosas","Babasonicos"],["Dos Amantes","TINI, Ulises Bueno"],["FAVORITA","Angela Torres"],["36 Vidas","TINI"],["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["La Noche Sin Tí","Los Huayra"],["The Climb","Miley Cyrus"],["Me Gusta","Miranda!, TINI"]],
+  [["El Efecto","Rauw Alejandro, Chencho Corleone"],["Llamado de Emergencia","Daddy Yankee"],["capaz (merengueton)","Alleh, Yorghaki"],["Fuego","Intoxicados, Andrés Calamaro"],["Pobre Diabla","Don Omar"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["La Noche Sin Tí","Los Huayra"],["Carita Triste","Q' Lokura, Los Herrera"],["Dos Amantes","TINI, Ulises Bueno"],["Down","TINI"],["FAVORITA","Angela Torres"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."]],
+  [["Dos Amantes","TINI, Ulises Bueno"],["capaz (merengueton)","Alleh, Yorghaki"],["El Efecto","Rauw Alejandro, Chencho Corleone"],["Down","TINI"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["Como Eran Las Cosas","Babasonicos"],["FAVORITA","Angela Torres"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["Pobre Diabla","Don Omar"],["CARALUNA En Vivo","Ian Lucas, Q' Lokura"],["The Climb","Miley Cyrus"],["Llamado de Emergencia","Daddy Yankee"]],
+  [["Callaita","Bad Bunny, Tainy"],["Como Eran Las Cosas","Babasonicos"],["BAILE INoLVIDABLE","Bad Bunny"],["Dos Amantes","TINI, Ulises Bueno"],["Pobre Diabla","Don Omar"],["La Noche Sin Tí","Los Huayra"],["Carita Triste","Q' Lokura, Los Herrera"],["DtMF","Bad Bunny"],["capaz (merengueton)","Alleh, Yorghaki"],["36 Vidas","TINI"],["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["Me Gusta","Miranda!, TINI"]],
+  [["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["Como Eran Las Cosas","Babasonicos"],["BAILE INoLVIDABLE","Bad Bunny"],["Pobre Diabla","Don Omar"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["capaz (merengueton)","Alleh, Yorghaki"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["36 Vidas","TINI"],["Carita Triste","Q' Lokura, Los Herrera"],["FAVORITA","Angela Torres"],["El Efecto","Rauw Alejandro, Chencho Corleone"],["The Climb","Miley Cyrus"]],
+  [["Llamado de Emergencia","Daddy Yankee"],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["36 Vidas","TINI"],["Carita Triste","Q' Lokura, Los Herrera"],["DtMF","Bad Bunny"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["Me Gusta","Miranda!, TINI"],["La Noche Sin Tí","Los Huayra"],["FAVORITA","Angela Torres"],["El Efecto","Rauw Alejandro, Chencho Corleone"],["BAILE INoLVIDABLE","Bad Bunny"]],
+  [["BAILE INoLVIDABLE","Bad Bunny"],["36 Vidas","TINI"],["DtMF","Bad Bunny"],["Carita Triste","Q' Lokura, Los Herrera"],["Pobre Diabla","Don Omar"],["Tu jardín con enanitos","Roze Oficial, Max Carra..."],["La Perla","ROSALÍA, Yahritza Y Su Esencia"],["A Puro Dolor - En Vivo","DesaKTa2, Agus Bernasconi"],["Llamado de Emergencia","Daddy Yankee"],["La Noche Sin Tí","Los Huayra"],["Dos Amantes","TINI, Ulises Bueno"],["El Efecto","Rauw Alejandro, Chencho Corleone"]]
+];
+
+let current = 0;
+let marked = cards.map(() => new Array(12).fill(false));
+
+function renderCard() {
+  const grid = document.getElementById('bingoGrid');
+  const cardData = cards[current];
+  const markedData = marked[current];
+  grid.innerHTML = '';
+  cardData.forEach((song, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'cell' + (markedData[i] ? ' marked' : '');
+    cell.innerHTML = '<span class="song-title">' + song[0] + '</span><span class="song-artist">' + song[1] + '</span>';
+    cell.onclick = () => { marked[current][i] = !marked[current][i]; renderCard(); };
+    grid.appendChild(cell);
+  });
+  document.getElementById('cardNum').textContent = 'cartón ' + (current+1) + ' / 15';
+  checkBingo();
+}
+
+function checkBingo() {
+  const m = marked[current];
+  const lines = [[0,1,2],[3,4,5],[6,7,8],[9,10,11],[0,3,6,9],[1,4,7,10],[2,5,8,11]];
+  const hasBingo = lines.some(l => l.every(i => m[i]));
+  document.getElementById('bingoBanner').style.display = hasBingo ? 'block' : 'none';
+}
+
+function prevCard() { current = (current + 14) % 15; renderCard(); }
+function nextCard() { current = (current + 1) % 15; renderCard(); }
+function resetCard() { marked[current] = new Array(12).fill(false); renderCard(); }
+
+renderCard();
+</script>
+</body>
+</html>
